@@ -1,12 +1,9 @@
 #!/usr/bin/env node
-import minimist from 'minimist'
-import { createRequire } from 'module'
-import path, { join as joinPath } from 'path'
-import { fileURLToPath } from 'url'
-import webpack from 'webpack'
 
-const require = createRequire(import.meta.url)
-
+const minimist = require('minimist')
+const path = require('path')
+const join = path.join
+const webpack = require('webpack')
 // Constants:
 
 const defaultPaths = [
@@ -26,9 +23,10 @@ let pluginEntryPath = null
 const paths = pathArg == null ? defaultPaths : [pathArg]
 
 if (pluginEntryPath == null) {
-  const path = paths.shift()
-  if (path != null) {
-    pluginEntryPath = path[0] === '/' ? path : joinPath(process.cwd(), path)
+  const defaultPath = paths.shift()
+  if (defaultPath != null) {
+    pluginEntryPath =
+      defaultPath[0] === '/' ? defaultPath : join(process.cwd(), defaultPath)
   }
 }
 console.log(`Plugin Entry Path: ${pluginEntryPath}`)
@@ -56,8 +54,10 @@ webpack(
     },
     output: {
       filename: 'plugin-bundle.js',
-      path: path.join(
-        path.dirname(fileURLToPath(import.meta.url)),
+      path: join(
+        path.dirname(__dirname),
+        '..',
+        '..',
         'android/app/src/main/assets/edge-core'
       )
     },
@@ -83,7 +83,8 @@ webpack(
         http: require.resolve('stream-http'),
         os: require.resolve('os-browserify/browser'),
         string_decoder: require.resolve('string_decoder'),
-        path: require.resolve('path-browserify')
+        path: require.resolve('path-browserify'),
+        util: require.resolve('util')
       },
       mainFields: ['browser', 'module', 'main']
     }
