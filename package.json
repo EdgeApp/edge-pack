@@ -1,6 +1,6 @@
 {
   "name": "edge-pack",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Bundles currency plugins for React Native projects to consume.",
   "scripts": {
     "clean": "rimraf dist lib",
